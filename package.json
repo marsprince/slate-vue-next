@@ -20,9 +20,8 @@
     "@babel/core": "^7.9.0",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-commonjs": "^12.0.0",
-    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-app": "^4.3.1",
-    "@vue/babel-preset-jsx": "^1.1.2",
+    "@vue/compiler-sfc": "^3.0.0-beta.14",
     "babel-loader": "^8.1.0",
     "commitizen": "^4.1.2",
     "css-loader": "^3.5.2",
@@ -39,9 +38,7 @@
     "style-loader": "^1.1.4",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
-    "vue-loader": "^15.9.1",
-    "vue-template-compiler": "^2.6.11",
-    "vue-tsx-support": "^2.3.3",
+    "vue-loader": "16.0.0-beta.3",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
@@ -53,8 +50,8 @@
     "is-url": "^1.2.4",
     "prismjs": "^1.20.0",
     "slate-hyperscript": "^0.58.3",
-    "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue": "3.0.0-beta.14",
+    "vue-router": "4.0.0-alpha.12"
   },
   "config": {
     "commitizen": {

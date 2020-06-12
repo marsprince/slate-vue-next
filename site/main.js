@@ -1,10 +1,4 @@
-import Vue from 'vue'
-import app from './app'
-import './index.css'
-import {router} from './router'
+import { createApp } from 'vue'
+import App from './app-next.vue'
 
-new Vue({
-  el: '#app',
-  router,
-  render: (h) => h(app)
-})
+createApp(App).mount('#app')
