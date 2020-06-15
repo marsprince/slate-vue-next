@@ -15,16 +15,8 @@ module.exports = {
       { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
     ]
   },
-  resolve:{
-    extensions:['.js','.ts','.tsx','.vue']
-  },
-  plugins: [
-    new VueLoaderPlugin(),
-    new HTMLWebpackPlugin({
-      template: path.resolve(site, './public/index.html')
-    })
-  ],
   resolve: {
+    extensions: ['.js', '.ts', '.tsx', '.vue'],
     alias: {
       // this isn't technically needed, since the default `vue` entry for bundlers
       // is a simple `export * from '@vue/runtime-dom`. However having this
@@ -33,4 +25,10 @@ module.exports = {
       'vue': '@vue/runtime-dom'
     }
   },
+  plugins: [
+    new VueLoaderPlugin(),
+    new HTMLWebpackPlugin({
+      template: path.resolve(site, './public/index.html')
+    })
+  ],
 };

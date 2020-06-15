@@ -1,12 +1,10 @@
-import VueRouter from 'vue-router'
-import Vue from 'vue'
-Vue.use(VueRouter)
+import { createRouter, createWebHistory } from 'vue-router'
 
 export const routes = [
   {
     path: '/plaintext',
     name: 'Plain Text',
-    component: () => import('../pages/plaintext')
+    component: () => import('../pages/plaintext/index.vue')
   },
   {
     path: '/',
@@ -14,7 +12,7 @@ export const routes = [
   },
 ]
 
-export const router = new VueRouter({
-  mode: 'hash',
+export const router = createRouter({
+  history: createWebHistory(),
   routes
 })
