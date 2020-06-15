@@ -345,7 +345,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.0"
 
-"@babel/plugin-syntax-jsx@^7.2.0", "@babel/plugin-syntax-jsx@^7.8.3":
+"@babel/plugin-syntax-jsx@^7.10.1", "@babel/plugin-syntax-jsx@^7.2.0", "@babel/plugin-syntax-jsx@^7.8.3":
   version "7.10.1"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-jsx/-/plugin-syntax-jsx-7.10.1.tgz#0ae371134a42b91d5418feb3c8c8d43e1565d2da"
   dependencies:
@@ -7205,16 +7205,6 @@ slate-hyperscript@^0.58.3:
   resolved "https://registry.yarnpkg.com/slate-hyperscript/-/slate-hyperscript-0.58.3.tgz#300c382b7fe5339daecde6918fc7782e4ac9f52d"
   dependencies:
     is-plain-object "^3.0.0"
-
-slate@*:
-  version "0.58.3"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.58.3.tgz#2ebde2e1f2c05217ed418597e9cef74618248136"
-  dependencies:
-    "@types/esrever" "^0.2.0"
-    esrever "^0.2.0"
-    immer "^5.0.0"
-    is-plain-object "^3.0.0"
-    tiny-warning "^1.0.3"
 
 slate@^0.57.1:
   version "0.57.3"

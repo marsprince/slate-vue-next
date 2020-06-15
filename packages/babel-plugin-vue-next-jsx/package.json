@@ -1,0 +1,12 @@
+{
+  "name": "@slate-vue/babel-plugin-vue-next-jsx",
+  "version": "0.1.3",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.10.1"
+  },
+  "repository": "https://github.com/marsprince/slate-vue-next.git",
+  "author": "liujia02<bit_liujia@163.com>",
+  "license": "MIT"
+}
