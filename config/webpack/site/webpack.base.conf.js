@@ -4,13 +4,24 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const site = path.join(__dirname, '../../../site');
 
 module.exports = {
-  entry: path.join(site, 'main.js'),
+  entry: path.join(site, 'main.ts'),
   module: {
     rules: [
       { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/},
       { test: /\.vue$/, use: 'vue-loader' },
       { test: /\.tsx$/, use: ['babel-loader','ts-loader']},
-      { test: /\.ts$/, use: ['babel-loader','ts-loader']},
+      {
+        test: /\.ts$/,
+        use: [
+          'babel-loader',
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
+            }
+          },
+        ]
+      },
       { test: /\.css$/, use: ['style-loader', 'css-loader']},
       { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader']},
     ]

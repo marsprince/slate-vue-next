@@ -20,17 +20,16 @@
         </a>
       </span>
     </div>
-    <transition name="slide">
-      <div v-if="showTabs" class="tabList">
-        <router-link v-for="({name, path}, $index) in routes"
-                     :key="$index"
-                     :to="path"
-                     active-class="active"
-                     class="tabList__item"
-                     @click.native="index = $index, showTabs = false">{{name}}
-        </router-link>
-      </div>
-    </transition>
+    <!--TODO: add transition vue3-->
+    <div v-if="showTabs" class="tabList">
+      <router-link v-for="({name, path}, $index) in routes"
+                   :key="$index"
+                   :to="path"
+                   active-class="active"
+                   class="tabList__item"
+                   @click.native="index = $index, showTabs = false">{{name}}
+      </router-link>
+    </div>
     <div class="main">
       <router-view></router-view>
     </div>
@@ -39,38 +38,38 @@
   </div>
 </template>
 
-<script>
-  import Icon from './pages/components/icon';
+<script lang="ts">
+  import Icon from './pages/components/icon.vue';
   import {routes} from './router'
+  import {defineComponent, ref, computed, watch} from 'vue'
+  import { useRoute } from 'vue-router';
 
-  export default {
+  export default defineComponent({
     name: 'app',
     components: {
       Icon
     },
-    data() {
+    setup() {
+      const route = useRoute()
+      const showTabs = ref(false);
+      let index = ref(null)
+
+      const name = computed(() => index.value!==null && routes[index.value].name)
+      const path = computed(() => index.value!==null && routes[index.value].path)
+
+      watch(route, (val) => {
+        index.value = routes.findIndex(el => el.name === val.name) || 0
+      })
+
       return {
-        showTabs: false,
+        showTabs,
         routes,
-        index: null
+        index,
+        name,
+        path
       }
     },
-    watch: {
-      '$route'(val) {
-        if(val.name) {
-          this.index = this.routes.findIndex(el => el.name === val.name) || 0
-        }
-      }
-    },
-    computed: {
-      name() {
-        return this.index!==null && this.routes[this.index].name
-      },
-      path() {
-        return this.index!==null && this.routes[this.index].path
-      }
-    }
-  };
+  });
 </script>
 
 <style scoped lang="less">

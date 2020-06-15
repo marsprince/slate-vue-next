@@ -1,6 +1,8 @@
 {
-  "files": [],
+  "files": [
+    "./site/shims-vue.d.ts"
+  ],
   "references": [
     { "path": "./packages/slate-vue-next" },
-  ]
+  ],
 }
