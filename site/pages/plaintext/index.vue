@@ -1,19 +1,11 @@
-<template>
-  <div>
-    {{test}}
-  </div>
-</template>
-
-<script>
+<script lang="jsx">
   export default {
     name: 'index',
     components: {
 
     },
-    data() {
-      return {
-        test: 1
-      }
+    render() {
+      return <div>23<div>asd</div></div>
     }
   };
 </script>

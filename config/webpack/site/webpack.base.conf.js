@@ -8,6 +8,7 @@ module.exports = {
   module: {
     rules: [
       { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/},
+      { test: /\.jsx$/, use: 'babel-loader'},
       { test: /\.vue$/, use: 'vue-loader' },
       { test: /\.tsx$/, use: ['babel-loader','ts-loader']},
       {

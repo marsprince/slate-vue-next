@@ -4,6 +4,9 @@ const path = require('path')
 
 module.exports = merge(base, {
   mode: 'production',
+  optimization: {
+    minimize: false
+  },
   output: {
     path: path.resolve('./', 'docs')
   }
