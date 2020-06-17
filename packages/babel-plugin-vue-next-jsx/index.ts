@@ -71,6 +71,41 @@ const transformJSXExpressionContainer = (t, path) => path.get('expression').node
  */
 const transformJSXSpreadChild = (t, path) => t.spreadElement(path.get('expression').node)
 
+/**
+ * Parse vue attribute from JSXAttribute
+ * @param t
+ * @param path JSXAttribute
+ * @param attributes Object<[type: string]: ObjectExpression>
+ * @param tagName string
+ * @param elementType string
+ * @returns Array<Expression>
+ */
+const parseAttributeJSXAttribute = (t, path, attributes) => {
+  const name = path.node.name.name
+  let value = path.get('value').node
+
+  if (t.isJSXExpressionContainer(value)) {
+    value = value.expression
+  } else {
+    if(!value) {
+      value = t.booleanLiteral(true)
+    }
+  }
+  attributes[name] = value
+}
+
+/**
+ * Transform attributes to ObjectExpression
+ * @param t
+ * @param attributes Object<[type: string]: ObjectExpression>
+ * @returns ObjectExpression
+ */
+
+const transformAttributes = (t, attributes, spread) => {
+  return t.objectExpression(Object.entries(attributes).map(
+    ([key, value]) => t.objectProperty(t.stringLiteral(key), value),
+  ).concat(spread));
+}
 
 /**
  * Get tag (first attribute for h) from JSXOpeningElement
@@ -95,6 +130,28 @@ const getTag = (t, path) => {
   }
 
   throw new Error(`getTag: ${namePath.type} is not supported`)
+}
+
+/**
+ * Get attributes from Array of JSX attributes
+ * @param t
+ * @param paths Array<JSXAttribute | JSXSpreadAttribute>
+ * @param tag Identifier | StringLiteral | MemberExpression
+ * @param openingElementPath JSXOpeningElement
+ * @returns Array<Expression>
+ */
+const getAttributes = (t, paths, tag, openingElementPath) => {
+  let attributes = {}
+  const spread = []
+  paths.forEach(path => {
+    if(t.isJSXAttribute(path)) {
+      parseAttributeJSXAttribute(t, path, attributes)
+    }
+    if (t.isJSXSpreadAttribute(path)) {
+      spread.push(t.spreadElement(path.get('argument').node))
+    }
+  })
+  return transformAttributes(t, attributes, spread)
 }
 
 /**
@@ -126,12 +183,12 @@ const getChildren = (t, paths) =>
 // Builds JSX Fragment <></> into
 // Production: h(type, arguments, children)
 function transformJSXElement(t, path) {
-  const tag = getTag(t, path.get('openingElement'))
+  const openingElementPath = path.get('openingElement')
+  const tag = getTag(t, openingElementPath)
   const children = getChildren(t, path.get('children'))
   const createElement = t.identifier('h');
-  // TODO: attrs
-  const attrs = template.expression('{}')()
-  const args = [tag, attrs]
+  const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
+  const args = [tag, attributes]
   if (children.length) {
     args.push(t.arrayExpression(children))
   }

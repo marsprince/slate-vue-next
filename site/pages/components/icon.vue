@@ -9,6 +9,9 @@
     name: 'icon',
     props: {
       icon: String
+    },
+    mounted() {
+      this.$emit('init')
     }
   });
 </script>

@@ -1,13 +1,17 @@
 <script lang="jsx">
-  export default {
-    name: 'index',
-    components: {
+  import Icon from '../components/icon'
 
-    },
-    render() {
-      return <div>23<div>asd</div></div>
+  export default () => {
+    const obj = {
+      'class': 'active'
     }
-  };
+    const onClick = () => {
+      console.log('click');
+    }
+    return (
+      <Icon class={'active d'} icon="search" onInit={onClick}></Icon>
+    )
+  }
 </script>
 
 <style scoped>
