@@ -5,6 +5,12 @@ import htmlTags from 'html-tags'
 import svgTags from 'svg-tags'
 import template from '@babel/template'
 
+const directiveKey = Symbol('directive')
+const vueRefsKey = Symbol('vueRefs')
+
+const isDirective = (attr) => attr.startsWith('v-')
+const internalDirective = ['v-show']
+
 /**
  * Transform JSXText to StringLiteral
  * @param t
@@ -86,12 +92,22 @@ const parseAttributeJSXAttribute = (t, path, attributes) => {
 
   if (t.isJSXExpressionContainer(value)) {
     value = value.expression
+    // if value is ref, change it to ref.value
+    const refs = path.hub.file[vueRefsKey]
+    if(refs && refs[value.name]) {
+      value = template.ast(`${value.name}.value`).expression
+    }
   } else {
     if(!value) {
       value = t.booleanLiteral(true)
     }
   }
-  attributes[name] = value
+
+  if(isDirective(name)) {
+    attributes[directiveKey].push([name, value])
+  } else {
+    attributes[name] = value
+  }
 }
 
 /**
@@ -141,7 +157,9 @@ const getTag = (t, path) => {
  * @returns Array<Expression>
  */
 const getAttributes = (t, paths, tag, openingElementPath) => {
-  let attributes = {}
+  let attributes = {
+    [directiveKey]: []
+  }
   const spread = []
   paths.forEach(path => {
     if(t.isJSXAttribute(path)) {
@@ -151,7 +169,12 @@ const getAttributes = (t, paths, tag, openingElementPath) => {
       spread.push(t.spreadElement(path.get('argument').node))
     }
   })
-  return transformAttributes(t, attributes, spread)
+  const directives = attributes[directiveKey]
+  delete attributes[directiveKey]
+  return {
+    data: transformAttributes(t, attributes, spread),
+    directives
+  }
 }
 
 /**
@@ -180,19 +203,46 @@ const getChildren = (t, paths) =>
     })
     .filter(el => el !== null && !t.isJSXEmptyExpression(el))
 
+const normalizeName = (name, addVueImportSpecifier) => {
+  if(internalDirective.includes(name)) {
+    const dirName = name.split('-')[1]
+    const normalizedName = 'v' + dirName.slice(0, 1).toUpperCase() + dirName.slice(1)
+    addVueImportSpecifier(normalizedName)
+    return normalizedName
+  } else {
+    return name.split('-')[1]
+  }
+}
+
+const genDirective = (t, call, directives, addVueImportSpecifier) => {
+  const withDirectives = t.identifier('withDirectives')
+  addVueImportSpecifier('withDirectives')
+  directives.forEach((dir) => {
+    const normalizedName = normalizeName(dir[0], addVueImportSpecifier)
+    dir[0] = t.identifier(normalizedName)
+  })
+  directives = directives.map( dir => t.arrayExpression(dir))
+  return t.callExpression(withDirectives, [call, t.arrayExpression(directives)])
+}
+
 // Builds JSX Fragment <></> into
 // Production: h(type, arguments, children)
-function transformJSXElement(t, path) {
+function transformJSXElement(t, path, addVueImportSpecifier) {
   const openingElementPath = path.get('openingElement')
   const tag = getTag(t, openingElementPath)
   const children = getChildren(t, path.get('children'))
   const createElement = t.identifier('h');
   const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
-  const args = [tag, attributes]
+  const args = [tag, attributes.data]
   if (children.length) {
     args.push(t.arrayExpression(children))
   }
-  return t.callExpression(createElement, args)
+  const callExpression = t.callExpression(createElement, args)
+  if(attributes.directives && attributes.directives.length!==0) {
+    return genDirective(t, callExpression, attributes.directives, addVueImportSpecifier)
+  } else {
+    return callExpression
+  }
 }
 
 // judge vue imported
@@ -207,25 +257,32 @@ function hasImportedVue(path) {
   return false
 };
 
+function genAddImportSpecifier(t, specifiers) {
+  const keys = specifiers.filter(function (s) {
+    return s.imported !== undefined;
+  }).map(function (s) {
+    return s.imported.name;
+  });
+  return (s) => {
+    if (!keys.includes(s)) {
+      specifiers.unshift(t.ImportSpecifier(t.identifier(s), t.identifier(s)));
+    }
+  }
+}
+
 // inject "import {h} from 'vue'"
 function inject(t, path) {
+  let addImportSpecifier;
   const importedVue = hasImportedVue(path)
   if(importedVue) {
-    const keys = importedVue.specifiers.filter(function (s) {
-      return s.imported !== undefined;
-    }).map(function (s) {
-      return s.imported.name;
-    });
-    const addImportSpecifier = function addImportSpecifier(s) {
-      if (!keys.includes(s)) {
-        importedVue.specifiers.unshift(t.ImportSpecifier(t.identifier(s), t.identifier(s)));
-      }
-    };
+    addImportSpecifier = genAddImportSpecifier(t, importedVue.specifiers)
     addImportSpecifier('h');
   } else {
     const vueImportDeclaration = template.ast('import {h} from "vue"')
     path.node.body.unshift(vueImportDeclaration)
+    addImportSpecifier = genAddImportSpecifier(t, vueImportDeclaration.specifiers)
   }
+  return addImportSpecifier
 }
 
 export default ({types}) => {
@@ -233,10 +290,24 @@ export default ({types}) => {
     name: 'babel-plugin-vue-next-jsx',
     inherits: jsx,
     visitor: {
+      Identifier: {
+        exit(path) {
+          if(path.node.name === 'ref' && path.parentPath.isCallExpression()) {
+            const declaration = path.findParent((p) => p.isVariableDeclaration());
+            // 0?
+            const declarationName = declaration.node.declarations[0].id.name
+            const file = path.hub.file;
+            if(!file[vueRefsKey]) {
+              file[vueRefsKey] = {}
+            }
+            file[vueRefsKey][declarationName] = true
+          }
+        }
+      },
       JSXElement: {
         exit(path) {
-          path.replaceWith(transformJSXElement(types, path))
-          inject(types, path.hub.file.path)
+          const addVueImportSpecifier = inject(types, path.hub.file.path)
+          path.replaceWith(transformJSXElement(types, path, addVueImportSpecifier))
         },
       }
     },
