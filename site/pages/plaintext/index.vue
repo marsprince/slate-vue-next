@@ -13,7 +13,7 @@
       },
     }
     return (
-      <Icon v-show={isShow} icon="search" onInit={onClick}></Icon>
+      <Icon icon="search" onInit={onClick}><div v-slot:right={slotProps}>{slotProps.user.name}</div></Icon>
     )
   }
 </script>

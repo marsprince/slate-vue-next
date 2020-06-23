@@ -1,5 +1,7 @@
 <template>
+    <slot></slot>
     <span class="icon material-icons">{{icon}}</span>
+    <slot name="right" :user="user"></slot>
 </template>
 
 <script>
@@ -12,6 +14,13 @@
     },
     mounted() {
       this.$emit('init')
+    },
+    data() {
+      return {
+        user: {
+          name: 'dd'
+        }
+      }
     }
   });
 </script>

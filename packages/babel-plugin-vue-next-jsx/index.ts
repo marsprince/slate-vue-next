@@ -7,9 +7,11 @@ import template from '@babel/template'
 
 const directiveKey = Symbol('directive')
 const vueRefsKey = Symbol('vueRefs')
+const slotKey = Symbol('slot')
 
 const isDirective = (attr) => attr.startsWith('v-')
-const internalDirective = ['v-show']
+const internalDirective = ['v-show', 'v-on', 'v-model']
+const isSlot = (attr) => attr.startsWith('v-slot')
 
 /**
  * Transform JSXText to StringLiteral
@@ -77,6 +79,9 @@ const transformJSXExpressionContainer = (t, path) => path.get('expression').node
  */
 const transformJSXSpreadChild = (t, path) => t.spreadElement(path.get('expression').node)
 
+const genSlot = () => {
+
+}
 /**
  * Parse vue attribute from JSXAttribute
  * @param t
@@ -87,7 +92,15 @@ const transformJSXSpreadChild = (t, path) => t.spreadElement(path.get('expressio
  * @returns Array<Expression>
  */
 const parseAttributeJSXAttribute = (t, path, attributes) => {
-  const name = path.node.name.name
+  let nameNode = path.get('name')
+  let namespace = ''
+  let name = ''
+  if(t.isJSXNamespacedName(nameNode)) {
+    namespace = nameNode.node.namespace.name
+    name = nameNode.node.name.name
+  } else {
+    namespace = nameNode.node.name
+  }
   let value = path.get('value').node
 
   if (t.isJSXExpressionContainer(value)) {
@@ -98,15 +111,20 @@ const parseAttributeJSXAttribute = (t, path, attributes) => {
       value = template.ast(`${value.name}.value`).expression
     }
   } else {
-    if(!value) {
+    if(!value && !isSlot(namespace)) {
       value = t.booleanLiteral(true)
     }
   }
 
-  if(isDirective(name)) {
-    attributes[directiveKey].push([name, value])
+  if(isDirective(namespace)) {
+    if(isSlot(namespace)) {
+      name = name || 'default'
+      attributes[slotKey].push([name,value])
+    } else {
+      attributes[directiveKey].push([namespace, value])
+    }
   } else {
-    attributes[name] = value
+    attributes[namespace] = value
   }
 }
 
@@ -158,7 +176,8 @@ const getTag = (t, path) => {
  */
 const getAttributes = (t, paths, tag, openingElementPath) => {
   let attributes = {
-    [directiveKey]: []
+    [directiveKey]: [],
+    [slotKey]: []
   }
   const spread = []
   paths.forEach(path => {
@@ -171,9 +190,14 @@ const getAttributes = (t, paths, tag, openingElementPath) => {
   })
   const directives = attributes[directiveKey]
   delete attributes[directiveKey]
+
+  const slots = attributes[slotKey]
+  delete attributes[slotKey]
+
   return {
     data: transformAttributes(t, attributes, spread),
-    directives
+    directives,
+    slots
   }
 }
 
@@ -225,6 +249,20 @@ const genDirective = (t, call, directives, addVueImportSpecifier) => {
   return t.callExpression(withDirectives, [call, t.arrayExpression(directives)])
 }
 
+const genSlotFunction = (t, children, params) => {
+  if(!params) {
+    params = []
+  } else if(t.isSequenceExpression(params)) {
+    params = params.expression
+  } else if(t.isStringLiteral(params)) {
+    params = [t.identifier(params.value)]
+  } else {
+    params = [params]
+  }
+  const returnCall = t.arrayExpression(children)
+  return t.arrowFunctionExpression(params, t.blockStatement([t.returnStatement(returnCall)]))
+}
+
 // Builds JSX Fragment <></> into
 // Production: h(type, arguments, children)
 function transformJSXElement(t, path, addVueImportSpecifier) {
@@ -233,13 +271,26 @@ function transformJSXElement(t, path, addVueImportSpecifier) {
   const children = getChildren(t, path.get('children'))
   const createElement = t.identifier('h');
   const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
+  const slots = []
   const args = [tag, attributes.data]
   if (children.length) {
-    args.push(t.arrayExpression(children))
+    const namedSlots = children.filter(child => child.slot && child.slot.length!==0)
+    const defaultSlots = children.filter(child => !child.slot || child.slot.length===0)
+    slots.push(t.objectProperty(t.identifier('default'), genSlotFunction(t, defaultSlots)))
+    namedSlots.forEach(callExpression => {
+      callExpression.slot.forEach(slot => {
+        slots.push(t.objectProperty(t.identifier(slot[0]), genSlotFunction(t, [callExpression], slot[1])))
+      })
+    })
+    args.push(t.ObjectExpression(slots))
   }
   const callExpression = t.callExpression(createElement, args)
+  callExpression.slot = attributes.slots
+
   if(attributes.directives && attributes.directives.length!==0) {
-    return genDirective(t, callExpression, attributes.directives, addVueImportSpecifier)
+    const directiveCallExpression = genDirective(t, callExpression, attributes.directives, addVueImportSpecifier)
+    directiveCallExpression.slot = attributes.slots
+    return directiveCallExpression
   } else {
     return callExpression
   }
@@ -290,6 +341,7 @@ export default ({types}) => {
     name: 'babel-plugin-vue-next-jsx',
     inherits: jsx,
     visitor: {
+      // this is for ref.value, need to splited
       Identifier: {
         exit(path) {
           if(path.node.name === 'ref' && path.parentPath.isCallExpression()) {
