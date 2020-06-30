@@ -6,7 +6,6 @@ import svgTags from 'svg-tags'
 import template from '@babel/template'
 
 const directiveKey = Symbol('directive')
-const vueRefsKey = Symbol('vueRefs')
 const slotKey = Symbol('slot')
 
 const isDirective = (attr) => attr.startsWith('v-')
@@ -105,11 +104,6 @@ const parseAttributeJSXAttribute = (t, path, attributes) => {
 
   if (t.isJSXExpressionContainer(value)) {
     value = value.expression
-    // if value is ref, change it to ref.value
-    const refs = path.hub.file[vueRefsKey]
-    if(refs && refs[value.name]) {
-      value = template.ast(`${value.name}.value`).expression
-    }
   } else {
     if(!value && !isSlot(namespace)) {
       value = t.booleanLiteral(true)
@@ -273,6 +267,7 @@ function transformJSXElement(t, path, addVueImportSpecifier) {
   const attributes = getAttributes(t, openingElementPath.get('attributes'), tag, openingElementPath)
   const slots = []
   const args = [tag, attributes.data]
+  // transform children to slots
   if (children.length) {
     const namedSlots = children.filter(child => child.slot && child.slot.length!==0)
     const defaultSlots = children.filter(child => !child.slot || child.slot.length===0)
@@ -287,6 +282,7 @@ function transformJSXElement(t, path, addVueImportSpecifier) {
   const callExpression = t.callExpression(createElement, args)
   callExpression.slot = attributes.slots
 
+  // add directive
   if(attributes.directives && attributes.directives.length!==0) {
     const directiveCallExpression = genDirective(t, callExpression, attributes.directives, addVueImportSpecifier)
     directiveCallExpression.slot = attributes.slots
@@ -341,21 +337,6 @@ export default ({types}) => {
     name: 'babel-plugin-vue-next-jsx',
     inherits: jsx,
     visitor: {
-      // this is for ref.value, need to splited
-      Identifier: {
-        exit(path) {
-          if(path.node.name === 'ref' && path.parentPath.isCallExpression()) {
-            const declaration = path.findParent((p) => p.isVariableDeclaration());
-            // 0?
-            const declarationName = declaration.node.declarations[0].id.name
-            const file = path.hub.file;
-            if(!file[vueRefsKey]) {
-              file[vueRefsKey] = {}
-            }
-            file[vueRefsKey][declarationName] = true
-          }
-        }
-      },
       JSXElement: {
         exit(path) {
           const addVueImportSpecifier = inject(types, path.hub.file.path)

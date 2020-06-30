@@ -1,5 +1,5 @@
 {
-  "name": "@slate-vue/babel-plugin-vue-next-jsx",
+  "name": "@slate-vue/babel-plugin-vue-next-unwrap-ref",
   "version": "0.0.0",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",

@@ -4,6 +4,8 @@
 
   export default () => {
     const isShow = ref(false)
+    const contentEditable = ref(false)
+
     const onClick = () => {
       console.log('click');
     }
@@ -13,7 +15,7 @@
       },
     }
     return (
-      <Icon icon="search" onInit={onClick}><div v-slot:right={slotProps}>{slotProps.user.name}</div></Icon>
+      <Icon icon="search" v-show={isShow}><div contentEditable={contentEditable}>ad</div></Icon>
     )
   }
 </script>
