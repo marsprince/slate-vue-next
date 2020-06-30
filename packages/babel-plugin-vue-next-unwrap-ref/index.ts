@@ -1,17 +1,8 @@
 const vueRefsKey = Symbol('vueRefs')
 
-const internalDirectives = ['v-if', 'v-show', 'v-model']
-
-const transform = (t, name, path) => {
+const transform = (t, name) => {
   const identifierName = t.identifier(name)
   identifierName[vueRefsKey] = true
-  if(t.isJSXExpressionContainer(path.parent) && t.isJSXAttribute(path.parentPath.parent)) {
-    const attrName = path.parentPath.parent.name.name
-    if(internalDirectives.includes(attrName)) {
-      path.node[vueRefsKey] = true
-      return path
-    }
-  }
   return t.MemberExpression(identifierName, t.identifier('value'))
 }
 
@@ -21,7 +12,8 @@ const isTransformed = (path) => {
 
 const isLegalUse = (t, path) => {
   const parent = path.parent
-  // object: withctx.show
+  // remove below situations
+  // object: _withctx.show
   return !t.isObjectProperty(parent)
 }
 
@@ -47,7 +39,7 @@ export default ({types}) => {
           }
           // convert Identifier
           if(file[vueRefsKey][name] && !isTransformed(path) && isLegalUse(types, path)) {
-            path.replaceWith(transform(types, name, path))
+            path.replaceWith(transform(types, name))
           }
         }
       }

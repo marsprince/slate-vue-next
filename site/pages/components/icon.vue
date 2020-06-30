@@ -1,7 +1,9 @@
 <template>
-    <slot></slot>
-    <span class="icon material-icons">{{icon}}</span>
-    <slot name="right" :user="user"></slot>
+    <div>
+      <slot></slot>
+      <span class="icon material-icons">{{icon}}</span>
+      <slot name="right" :user="user"></slot>
+    </div>
 </template>
 
 <script>
