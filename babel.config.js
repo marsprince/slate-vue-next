@@ -1,9 +1,5 @@
 module.exports = {
   "presets": [
-    ["@vue/babel-preset-app", {useBuiltIns: false, jsx: false}],
-  ],
-  "plugins": [
-    ["@slate-vue/babel-plugin-vue-next-jsx"],
-    ["@slate-vue/babel-plugin-vue-next-unwrap-ref"]
+    ["@vue/babel-preset-app", {useBuiltIns: false}],
   ]
 }

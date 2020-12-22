@@ -14,22 +14,23 @@
       <span class="exampleHeader__title">
         {{name}}
         <a
-          :href='`https://github.com/marsprince/slate-vue/blob/master/site/pages/${path}/index.vue`'
+            :href='`https://github.com/marsprince/slate-vue/blob/master/site/pages/${path}/index.vue`'
         >
           (View Source)
         </a>
       </span>
     </div>
-    <!--TODO: add transition vue3-->
-    <div v-if="showTabs" class="tabList">
-      <router-link v-for="({name, path}, $index) in routes"
-                   :key="$index"
-                   :to="path"
-                   active-class="active"
-                   class="tabList__item"
-                   @click.native="index = $index, showTabs = false">{{name}}
-      </router-link>
-    </div>
+    <transition name="slide">
+      <div v-if="showTabs" class="tabList">
+        <router-link v-for="({name, path}, $index) in routes"
+                     :key="$index"
+                     :to="path"
+                     active-class="active"
+                     class="tabList__item"
+                     @click.native="index = $index, showTabs = false">{{name}}
+        </router-link>
+      </div>
+    </transition>
     <div class="main">
       <router-view></router-view>
     </div>
@@ -41,7 +42,7 @@
 <script lang="ts">
   import Icon from './pages/components/icon.vue';
   import {routes} from './router'
-  import {defineComponent, ref, computed, watch} from 'vue'
+  import {defineComponent, ref, computed, watch, Ref} from 'vue'
   import { useRoute } from 'vue-router';
 
   export default defineComponent({
@@ -52,7 +53,7 @@
     setup() {
       const route = useRoute()
       const showTabs = ref(false);
-      let index = ref(null)
+      let index: Ref<null | number> = ref(null)
 
       const name = computed(() => index.value!==null && routes[index.value].name)
       const path = computed(() => index.value!==null && routes[index.value].path)

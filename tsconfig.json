@@ -1,8 +1,20 @@
 {
-  "files": [
-    "./site/shims-vue.d.ts"
-  ],
-  "references": [
-    { "path": "./packages/slate-vue-next" },
-  ],
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "jsxFactory": "VueTsxSupport",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  }
 }

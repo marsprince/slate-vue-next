@@ -13,19 +13,15 @@
     "release:site": "webpack --config ./config/webpack/site/webpack.publish.conf.js",
     "watch": "yarn build --watch",
     "start": "npm-run-all --parallel --print-label watch serve",
-    "release": "NODE_ENV=production yarn build && lerna publish",
-    "commit": "git add . && git-cz"
+    "commit": "rz-commit"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@razors/build-rollup": "^0.0.9",
-    "@slate-vue/babel-plugin-vue-next-jsx": "*",
+    "@razors/build-commit": "^0.0.20",
+    "@razors/build-rollup": "^0.0.20",
     "@vue/babel-preset-app": "^4.3.1",
     "@vue/compiler-sfc": "^3.0.0-beta.14",
     "babel-loader": "^8.1.0",
-    "commitizen": "^4.1.2",
     "css-loader": "^3.5.2",
-    "faker": "^4.1.0",
     "html-webpack-plugin": "^4.0.4",
     "lerna": "^3.20.2",
     "less": "^3.11.1",
@@ -41,10 +37,6 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "cz-conventional-changelog": "^3.2.0",
-    "image-extensions": "^1.1.0",
-    "is-url": "^1.2.4",
-    "prismjs": "^1.20.0",
     "slate-hyperscript": "^0.58.3",
     "vue": "3.0.0-beta.14",
     "vue-router": "4.0.0-alpha.12"
