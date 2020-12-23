@@ -1,25 +1,36 @@
-<script lang="jsx">
-  import Icon from '../components/icon'
-  import {ref} from 'vue'
+<template>
+  <Slate :value="value">
+<!--    <button @click="clear">clear</button>-->
+<!--    <Editable placeholder="Enter some plain text..." spellcheck="true" autoCorrect="on"></Editable>-->
+  </Slate>
+</template>
 
-  export default () => {
-    const isShow = ref(false)
-    const contentEditable = ref(false)
+<script>
+import { Slate } from 'slate-vue-next'
 
-    const onClick = () => {
-      console.log('click');
+// this value is for editor
+const initialValue = [
+  {
+    children: [
+      { text: 'This is editable plain text, just like a <textarea>!' },
+    ],
+  },
+]
+export default {
+  name: 'index',
+  components: {
+    Slate,
+    // Editable
+  },
+  setup() {
+    return {
+      value: JSON.stringify(initialValue)
     }
-    const test = {
-      beforeMount(el, binding, vnode, prevVnode) {
-        console.log(el, vnode);
-      },
+  },
+  methods: {
+    clear() {
+      // this.$editor.clear()
     }
-    return (
-      <Icon icon="search" v-show={isShow}><div contentEditable={contentEditable}>ad</div></Icon>
-    )
   }
+};
 </script>
-
-<style scoped>
-
-</style>

@@ -5983,6 +5983,11 @@ is-hotkey@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/is-hotkey/-/is-hotkey-0.1.6.tgz#c214b1ccdcbda46fba4ba93d2de64915db737471"
 
+is-hotkey@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/is-hotkey/-/is-hotkey-0.2.0.tgz#1835a68171a91e5c9460869d96336947c8340cef"
+  integrity sha512-UknnZK4RakDmTgz4PI1wIph5yxSs/mvChWs9ifnlXsKuXgWmOkY/hAE0H/k2MIqH0RlRye0i1oC07MCRSD28Mw==
+
 is-module@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-module/-/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
@@ -8606,9 +8611,39 @@ slate-hyperscript@^0.58.3:
   dependencies:
     is-plain-object "^3.0.0"
 
+"slate-vue-shared@file:../slate-vue/packages/slate-vue-shared":
+  version "0.2.0"
+  dependencies:
+    is-hotkey "^0.2.0"
+    slate "^0.59.0"
+    slate-vue "^0.2.0"
+    vue "^2.6.11"
+
+slate-vue@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/slate-vue/-/slate-vue-0.2.0.tgz#f2226092e4b8dec2ae4ebb9d294d5dce3b0abb44"
+  integrity sha512-BSk541b/sF6kgnYqwxqQCLw34GpUmwci+cYFeHT/+upuIief/IkdBu9cjMFjMqniRaaXdpa/1DDjwltxvkzgPg==
+  dependencies:
+    direction "^1.0.4"
+    is-hotkey "^0.1.6"
+    slate "^0.59.0"
+    vue "^2.6.11"
+    vue-tsx-support "^3.0.0"
+
 slate@^0.57.1:
   version "0.57.3"
   resolved "https://registry.yarnpkg.com/slate/-/slate-0.57.3.tgz#2b2bd5c85c2d56c9b663787b7e45a64a439ea8c1"
+  dependencies:
+    "@types/esrever" "^0.2.0"
+    esrever "^0.2.0"
+    immer "^5.0.0"
+    is-plain-object "^3.0.0"
+    tiny-warning "^1.0.3"
+
+slate@^0.59.0:
+  version "0.59.0"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.59.0.tgz#3169daf2f036e84aa149f60e0d12ef2fc4c0839e"
+  integrity sha512-M4UTMkXExxuq8tCD+knn7BtV2pmY8pepay++EF59rmg/v4RB6X1gNzA0xP3aw2rqYl8TmWdOBdy9InFrm3WyXw==
   dependencies:
     "@types/esrever" "^0.2.0"
     esrever "^0.2.0"
@@ -9557,6 +9592,11 @@ vue-tsx-support@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-tsx-support/-/vue-tsx-support-2.3.3.tgz#234603ce7d15d6a93aff7049622b3857250bcf47"
 
+vue-tsx-support@^3.0.0:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/vue-tsx-support/-/vue-tsx-support-3.0.3.tgz#769733751d04de906f74f4e35ecb13733ff206be"
+  integrity sha512-TnY0BPTdK6YZ+kE8mBXC+Fpfz7JTPoZjNLvP+DLfDEYtotXrkQOwVSTsQtFZsDuukgPYz6gc/uA+fu6yPu/v/w==
+
 vue@3.0.0-beta.14:
   version "3.0.0-beta.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.0.0-beta.14.tgz#d2c8739e00c4a4a06b519c14c57d204c350c980c"
@@ -9564,6 +9604,11 @@ vue@3.0.0-beta.14:
     "@vue/compiler-dom" "3.0.0-beta.14"
     "@vue/runtime-dom" "3.0.0-beta.14"
     "@vue/shared" "3.0.0-beta.14"
+
+vue@^2.6.11:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
 watchpack-chokidar2@^2.0.0:
   version "2.0.0"
