@@ -1,5 +1,5 @@
 import * as tsx from 'vue-tsx-support'
-import {getCurrentInstance, reactive} from 'vue'
+import {reactive} from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
 import { useEditor } from '../plugins';
 
@@ -16,9 +16,9 @@ export const Slate = {
   setup({ value }: any, ctx: any) {
     const editor = useEditor()
     renderSlate(value, editor)
-    EDITOR_TO_ON_CHANGE.set(editor, () => {
-
-    })
+    // EDITOR_TO_ON_CHANGE.set(editor, () => {
+    //
+    // })
   },
   render() {
     return 'init'
