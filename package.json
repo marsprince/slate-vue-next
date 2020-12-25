@@ -16,9 +16,10 @@
     "commit": "rz-commit"
   },
   "devDependencies": {
+    "@razors/build-babel": "^0.0.20",
     "@razors/build-commit": "^0.0.20",
     "@razors/build-rollup": "^0.0.20",
-    "@vue/babel-preset-app": "^4.3.1",
+    "@vue/babel-plugin-jsx": "^1.0.0-rc.5",
     "@vue/compiler-sfc": "^3.0.0-beta.14",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.2",

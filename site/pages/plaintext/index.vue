@@ -1,6 +1,6 @@
 <template>
   <Slate :value="value">
-<!--    <button @click="clear">clear</button>-->
+    <button @click="clear">clear</button>
 <!--    <Editable placeholder="Enter some plain text..." spellcheck="true" autoCorrect="on"></Editable>-->
   </Slate>
 </template>

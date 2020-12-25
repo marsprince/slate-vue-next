@@ -20,7 +20,7 @@ export const Slate = {
     //
     // })
   },
-  render() {
-    return 'init'
+  render(this: any) {
+    return this.$slots.default()
   }
 }

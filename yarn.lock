@@ -2395,6 +2395,13 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@razors/build-babel@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@razors/build-babel/-/build-babel-0.0.20.tgz#5271ac23e8a64638db83f9a2dd2141a8921bb0dd"
+  integrity sha512-lMioElWnOHQgzmXBeOniIhzntEOiOzigi9I3EJcftZ33rUHf1jt1MwcB9AiTvXtMdS9vTVmDhUYXEn3haoqvDg==
+  dependencies:
+    "@vue/babel-preset-app" "^4.4.5"
+
 "@razors/build-commit@^0.0.20":
   version "0.0.20"
   resolved "https://registry.yarnpkg.com/@razors/build-commit/-/build-commit-0.0.20.tgz#0d950f2925818dbe07c245cbf4ff69b50c59b223"
@@ -2586,7 +2593,7 @@
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-transform-on/-/babel-helper-vue-transform-on-1.0.0-rc.2.tgz#7246341f666e7c6e65b13da420e2ce85714fbbca"
   integrity sha512-1+7CwjQ0Kasml6rHoNQUmbISwqLNNfFVBUcZl6QBremUl296ZmLrVQPqJP5pyAAWjZke5bpI1hlj+LVVuT7Jcg==
 
-"@vue/babel-plugin-jsx@^1.0.0-0":
+"@vue/babel-plugin-jsx@^1.0.0-0", "@vue/babel-plugin-jsx@^1.0.0-rc.5":
   version "1.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/@vue/babel-plugin-jsx/-/babel-plugin-jsx-1.0.0-rc.5.tgz#e440be2d0775ee3828cba2c38a03b19a92174865"
   integrity sha512-IUxERGiEeX9i1Vt9UtBYqOtfPYjOwEP0sFyPRI8xjkXAhJpaAIwa8JdcYakOqzIlXwhk3XD+7VFdyr/v+rLLFw==
@@ -2632,7 +2639,7 @@
     core-js-compat "^3.6.5"
     semver "^6.1.0"
 
-"@vue/babel-preset-app@^4.5.9":
+"@vue/babel-preset-app@^4.4.5", "@vue/babel-preset-app@^4.5.9":
   version "4.5.9"
   resolved "https://registry.yarnpkg.com/@vue/babel-preset-app/-/babel-preset-app-4.5.9.tgz#a4ef1830a21301e4f77d7cd4a04555d8a01eaf33"
   integrity sha512-d2H4hFnJsGnZtJAAZIbo1dmQJ2SI1MYix1Tc9/etlnJtCDPRHeCNodCSeuLgDwnoAyT3unzyHmTtaO56KRDuOQ==

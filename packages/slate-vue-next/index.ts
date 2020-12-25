@@ -1,2 +1,3 @@
+import './types'
 export * from './plugins/index'
-export { Slate } from './component/slate'
+export { Slate } from './components/slate'

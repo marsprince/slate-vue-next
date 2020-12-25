@@ -33,7 +33,8 @@ export const useSlate = () => {
   const instance = useInstance()
   // update will be triggered both reactivity and manual
   //
+  const editor = useEditor()
   watchEffect(() => {
-    return instance.$editor._state
+    editor._state.forEach(()=>{})
   })
 }

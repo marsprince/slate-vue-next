@@ -1,5 +1,5 @@
-module.exports = {
-  "presets": [
-    ["@vue/babel-preset-app", {useBuiltIns: false}],
-  ]
-}
+const babelConfigure = require('@razors/build-babel')
+const config = babelConfigure({},{
+  "plugins": ["@vue/babel-plugin-jsx"]
+})
+module.exports = config
