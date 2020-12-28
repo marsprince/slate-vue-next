@@ -1,6 +1,7 @@
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, inject } from 'vue'
 import { Text, Editor, Path, Node } from 'slate'
 import { VueEditor } from 'slate-vue-shared'
+import { useEditor } from '../plugins';
 
 interface ZeroWidthStringProps {
   length?: number
@@ -50,19 +51,26 @@ const ZeroWidthString = (props: ZeroWidthStringProps) => {
 const string = defineComponent({
   props: {
     leaf: {
-      type: Object as PropType<Text>
-    },
-    editor: Object
+      type: Object as PropType<Text>,
+      required: true
+    }
   },
-  inject: ['isLast', 'parent', 'text'],
   components: {
     TextString
   },
-  data(): any {
-    return {}
+  setup() {
+    const isLast = inject('isLast')
+    const parent = inject('parent')
+    const text = inject('text')
+    return {
+      isLast,
+      parent,
+      text
+    }
   },
   render() {
-    const { leaf, editor, isLast, parent, text } = this
+    const editor = useEditor()
+    const { leaf, isLast, parent, text } = this
     const path = VueEditor.findPath(editor, text as Node)
     const parentPath = Path.parent(path)
 

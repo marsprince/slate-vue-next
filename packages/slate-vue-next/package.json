@@ -4,8 +4,7 @@
   "dependencies": {
     "direction": "^1.0.4",
     "slate": "^0.57.1",
-    "slate-vue-shared": "file: ../../../../../slate-vue/packages/slate-vue-shared",
-    "vue-tsx-support": "^2.3.3"
+    "slate-vue-shared": "file: ../../../../../slate-vue/packages/slate-vue-shared"
   },
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",

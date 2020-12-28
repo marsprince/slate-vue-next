@@ -1,4 +1,3 @@
-import * as tsx from 'vue-tsx-support'
 import {reactive} from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
 import { useEditor } from '../plugins';
