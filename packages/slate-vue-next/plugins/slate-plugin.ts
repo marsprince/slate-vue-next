@@ -1,4 +1,5 @@
 import { createEditor } from 'slate';
+import { vRef } from './hooks';
 
 export const createEditorInstance = () => {
   const editor = createEditor()
@@ -16,5 +17,6 @@ export const SlatePlugin = {
         }
       }
     })
+    app.directive('ref', vRef)
   }
 }

@@ -1,4 +1,4 @@
-import {reactive} from 'vue'
+import { reactive } from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
 import { useEditor } from '../plugins';
 
@@ -20,7 +20,6 @@ export const Slate = {
     // })
   },
   render(this: any) {
-    console.log(this);
     return this.$slots.default()
   }
 }
