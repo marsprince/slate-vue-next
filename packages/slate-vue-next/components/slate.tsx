@@ -21,6 +21,7 @@ export const Slate = {
     // })
   },
   render(this: any) {
+    console.log(this);
     return this.$slots.default()
   }
 }
