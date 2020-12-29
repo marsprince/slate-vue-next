@@ -29,14 +29,14 @@ export const vRef: ObjectDirective<HTMLElement> = {
     handleRef(el, binding.value)
   },
   unmounted(el, binding) {
-    handleRef(el, binding.value)
+    handleRef(el, null)
   }
 }
 
 export const useRef = (val: any) => {
   return reactive(
     {
-      current: val || {}
+      current: val
     }
   )
 }

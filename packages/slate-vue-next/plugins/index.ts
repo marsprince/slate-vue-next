@@ -1,3 +1,3 @@
-export {SlatePlugin} from './slate-plugin'
+export {SlatePlugin, elementWatcherPlugin} from './slate-plugin'
 export {useEditor} from './uses'
 export {useRef, useEffect, vRef} from './hooks'
