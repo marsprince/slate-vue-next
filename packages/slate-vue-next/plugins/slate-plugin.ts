@@ -1,6 +1,6 @@
 import { createEditor, Operation } from 'slate';
-import { vRef } from './hooks';
-import { useEditor } from './uses';
+import { vRef } from './vue-hooks';
+import { useEditor } from './slate-hooks';
 
 // for element and element[]
 export const elementWatcherPlugin = (instance: any, type: string) => {
