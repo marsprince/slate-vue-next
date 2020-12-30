@@ -1,12 +1,15 @@
 const rollupConfigure = require('@razors/build-rollup')
-const VueNextJsx = require('../../packages/babel-plugin-vue-next-jsx/package.json')
-const VueNextUnwrapRef = require('../../packages/babel-plugin-vue-next-unwrap-ref/package.json')
+const SlateVueNext = require('../../packages/slate-vue-next/package.json')
 
 export default [
-  rollupConfigure(VueNextJsx, {
-    target: 'cjs'
+  rollupConfigure(SlateVueNext, {
+    target: 'cjs',
+    useTypescript: true,
+    useVue: true
   }),
-  rollupConfigure(VueNextUnwrapRef, {
-    target: 'cjs'
+  rollupConfigure(SlateVueNext, {
+    target: 'es',
+    useTypescript: true,
+    useVue: true
   })
 ]

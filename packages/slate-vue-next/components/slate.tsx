@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, defineComponent } from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
 import { useEditor } from '../plugins';
 
@@ -8,7 +8,7 @@ const renderSlate = (value: string, editor: any) => {
   editor._state = reactive($$data)
 }
 
-export const Slate = {
+export const Slate = defineComponent({
   props: {
     value: String
   },
@@ -22,4 +22,4 @@ export const Slate = {
   render(this: any) {
     return this.$slots.default()
   }
-}
+})

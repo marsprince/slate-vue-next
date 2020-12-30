@@ -346,7 +346,6 @@ export const Editable = defineComponent({
         >
         <Children
           node={editor}
-          selection={editor.selection}
         />
       </div>
     )

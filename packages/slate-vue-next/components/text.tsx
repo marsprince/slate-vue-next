@@ -29,8 +29,7 @@ const Text = defineComponent({
       required: true
     },
     decorations: {
-      type: Array as PropType<Array<Range>>,
-      required: true
+      type: Array as PropType<Array<Range>>
     },
   },
   components: {
@@ -71,7 +70,7 @@ const Text = defineComponent({
   },
   render() {
     const { text, placeholder, ref } = this
-    let decorations: Array<Range> = this.decorations;
+    let decorations: any = this.decorations;
     if(!decorations) {
       const editor = useEditor()
       const p = VueEditor.findPath(editor, text)

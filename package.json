@@ -31,7 +31,7 @@
     "style-loader": "^1.1.4",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
-    "vue-loader": "16.0.0-beta.3",
+    "vue-loader": "^16.0.0-rc.1",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
@@ -39,12 +39,15 @@
   },
   "dependencies": {
     "slate-hyperscript": "^0.58.3",
-    "vue": "3.0.0-beta.14",
+    "vue": "^3.0.4",
     "vue-router": "4.0.0-alpha.12"
   },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "resolutions": {
+    "rollup-plugin-vue": "^6.0.0-beta.10"
   }
 }

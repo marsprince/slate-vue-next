@@ -8,7 +8,7 @@ import {
 } from 'slate-vue-shared'
 import { elementWatcherPlugin, useEditor } from '../plugins';
 import { KEY_TO_VNODE, NODE_TO_INDEX, NODE_TO_KEY, NODE_TO_PARENT } from 'slate-vue-shared';
-import { PropType, defineComponent, Fragment } from 'vue';
+import { PropType, defineComponent } from 'vue';
 
 /**
  * Children.
@@ -24,8 +24,7 @@ const Children = defineComponent({
   },
   components: {
     TextComponent,
-    ElementComponent,
-    Fragment
+    ElementComponent
   },
   mounted() {
     elementWatcherPlugin(this, 'children')
@@ -108,7 +107,7 @@ const Children = defineComponent({
       // set key and vnode
       KEY_TO_VNODE.set(key, cacheVnode)
     }
-    return <Fragment>{children}</Fragment>;
+    return children;
   }
 });
 

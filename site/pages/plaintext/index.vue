@@ -1,12 +1,12 @@
 <template>
   <Slate :value="value">
     <button @click="clear">clear</button>
-<!--    <Editable placeholder="Enter some plain text..." spellcheck="true" autoCorrect="on"></Editable>-->
+    <Editable placeholder="Enter some plain text..." spellcheck="true" autoCorrect="on"></Editable>
   </Slate>
 </template>
 
 <script>
-import { Slate } from 'slate-vue-next'
+import { Slate, Editable } from 'slate-vue-next'
 
 // this value is for editor
 const initialValue = [
@@ -20,7 +20,7 @@ export default {
   name: 'index',
   components: {
     Slate,
-    // Editable
+    Editable
   },
   setup() {
     return {
