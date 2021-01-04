@@ -111,56 +111,56 @@ export const Editable = defineComponent({
     const editor = useEditor()
 
     const eventMethods = {
-        _onClick(event: IEvent) {
+        onClick(event: IEvent) {
           EditableComponent.onClick(event, editor, this)
         },
         onSelectionchange() {
           EditableComponent.onSelectionchange(useEditor(), this)
         },
-        _onBeforeInput(event: IEvent) {
+        onBeforeInput(event: IEvent) {
           EditableComponent.onBeforeInput(event, useEditor(), this)
         },
-        _onCompositionEnd(event: any) {
+        onCompositionEnd(event: any) {
           EditableComponent.onCompositionEnd(event, useEditor(), this)
         },
-        _onCompositionStart(event: IEvent) {
+        onCompositionStart(event: IEvent) {
           EditableComponent.onCompositionStart(event, useEditor(), this)
         },
-        _onKeyDown(event: any) {
+        onKeyDown(event: any) {
           EditableComponent.onKeyDown(event, useEditor(), this)
         },
-        _onFocus(event: any) {
+        onFocus(event: any) {
           EditableComponent.onFocus(event, useEditor(), this)
         },
-        _onBlur(event: any) {
+        onBlur(event: any) {
           EditableComponent.onBlur(event, useEditor(), this)
         },
-        _onCopy(event: any) {
+        onCopy(event: any) {
           EditableComponent.onCopy(event, useEditor(), this)
         },
-        _onPaste(event: any) {
+        onPaste(event: any) {
           EditableComponent.onPaste(event, useEditor(), this)
         },
-        _onCut(event: any) {
+        onCut(event: any) {
           EditableComponent.onCut(event, useEditor(), this)
         },
-        _onDragOver(event: any) {
+        onDragOver(event: any) {
           EditableComponent.onDragOver(event, useEditor(), this)
         },
-        _onDragStart(event: any) {
+        onDragStart(event: any) {
           EditableComponent.onDragStart(event, useEditor(), this)
         },
-        _onDrop(event: any) {
+        onDrop(event: any) {
           EditableComponent.onDrop(event, useEditor(), this)
         }
       };
 
-    const dataAndMethods = {
+    const dataAndMethods: any = {
       editableRef,
       isComposing,
       isUpdatingSelection,
       latestElement,
-      ...eventMethods
+      eventMethods
     }
 
     IS_READ_ONLY.set(editor, props.readOnly)
@@ -168,9 +168,9 @@ export const Editable = defineComponent({
     const initListener = ()=>{
       // Attach a native DOM event handler for `selectionchange`
       useEffect(()=>{
-        document.addEventListener('selectionchange', dataAndMethods.onSelectionchange)
+        document.addEventListener('selectionchange', eventMethods.onSelectionchange)
         return () => {
-          document.removeEventListener('selectionchange', dataAndMethods.onSelectionchange)
+          document.removeEventListener('selectionchange', eventMethods.onSelectionchange)
         }
       });
     };
@@ -295,22 +295,22 @@ export const Editable = defineComponent({
   },
   render() {
     const editor = useEditor();
-    const {editableRef} = this;
+    const {editableRef, eventMethods} = this;
     // name must be corresponded with standard
     const on: any  = {
-      click: this._onClick,
-      keydown: this._onKeyDown,
-      focus: this._onFocus,
-      blur: this._onBlur,
-      beforeinput: this._onBeforeInput,
-      copy: this._onCopy,
-      cut: this._onCut,
-      compositionend: this._onCompositionEnd,
-      compositionstart: this._onCompositionStart,
-      dragover: this._onDragOver,
-      dragstart: this._onDragStart,
-      drop: this._onDrop,
-      paste: this._onPaste
+      click: eventMethods._onClick,
+      keydown: eventMethods._onKeyDown,
+      focus: eventMethods._onFocus,
+      blur: eventMethods._onBlur,
+      beforeinput: eventMethods._onBeforeInput,
+      copy: eventMethods._onCopy,
+      cut: eventMethods._onCut,
+      compositionend: eventMethods._onCompositionEnd,
+      compositionstart: eventMethods._onCompositionStart,
+      dragover: eventMethods._onDragOver,
+      dragstart: eventMethods._onDragStart,
+      drop: eventMethods._onDrop,
+      paste: eventMethods._onPaste
     };
     const attrs = {
       spellcheck: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.spellCheck,
