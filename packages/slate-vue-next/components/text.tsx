@@ -37,7 +37,7 @@ const Text = defineComponent({
   },
   inject: ['decorate', 'placeholder'],
   setup(props) {
-    const ref = useRef(null);
+    const textRef = useRef(null);
     const { text, isLast, parent } = props;
     provide('text', text)
     provide('isLast', isLast)
@@ -49,10 +49,10 @@ const Text = defineComponent({
     const key = VueEditor.findKey(editor, text)
     const initRef = () => {
       useEffect(()=>{
-        if (ref.current) {
-          KEY_TO_ELEMENT.set(key, ref.current)
-          NODE_TO_ELEMENT.set(text, ref.current)
-          ELEMENT_TO_NODE.set(ref.current, text)
+        if (textRef.current) {
+          KEY_TO_ELEMENT.set(key, textRef.current)
+          NODE_TO_ELEMENT.set(text, textRef.current)
+          ELEMENT_TO_NODE.set(textRef.current, text)
         } else {
           KEY_TO_ELEMENT.delete(key)
           NODE_TO_ELEMENT.delete(text)
@@ -63,13 +63,13 @@ const Text = defineComponent({
     initRef()
 
     return {
-      ref,
+      textRef,
       decorate,
       placeholder
     }
   },
   render() {
-    const { text, placeholder, ref } = this
+    const { text, placeholder, textRef } = this
     let decorations: any = this.decorations;
     if(!decorations) {
       const editor = useEditor()
@@ -105,7 +105,7 @@ const Text = defineComponent({
         )
     }
     return (
-      <span data-slate-node="text" v-ref={ref}>
+      <span data-slate-node="text" v-ref={textRef}>
         {children}
       </span>
     )

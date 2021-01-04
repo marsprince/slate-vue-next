@@ -9,7 +9,7 @@ import {
   VueEditor
 } from 'slate-vue-shared';
 import { Range } from 'slate';
-import { PropType, defineComponent, ref } from 'vue';
+import { PropType, defineComponent, ref, provide } from 'vue';
 
 interface IEvent extends Event {
   data: string | null
@@ -96,20 +96,17 @@ export const Editable = defineComponent({
   components: {
     Children
   },
-  provide(): object {
-    return {
-      'renderLeaf': this.renderLeaf,
-      'renderElement': this.renderElement,
-      'decorate': this.decorate,
-      'readOnly': this.readOnly,
-      'placeholder': this.placeholder
-    }
-  },
   setup(props) {
-    const $ref = useRef(null);
+    const editableRef = useRef(null);
     const isComposing = ref(false)
     const isUpdatingSelection = ref(false)
     const latestElement = ref(null)
+
+    provide('renderLeaf', props.renderLeaf)
+    provide('renderElement', props.renderElement)
+    provide('decorate', props.decorate)
+    provide('readOnly', props.readOnly)
+    provide('placeholder', props.placeholder)
 
     const editor = useEditor()
 
@@ -159,7 +156,7 @@ export const Editable = defineComponent({
       };
 
     const dataAndMethods = {
-      $ref,
+      editableRef,
       isComposing,
       isUpdatingSelection,
       latestElement,
@@ -179,10 +176,10 @@ export const Editable = defineComponent({
     };
     const updateAutoFocus = () => {
       useEffect(() => {
-        if ($ref.current && props.autoFocus) {
+        if (editableRef.current && props.autoFocus) {
           // can't focus in current event loop?
           setTimeout(()=>{
-            $ref.current.focus()
+            editableRef.current.focus()
           }, 0)
         }
       }, [props.autoFocus])
@@ -190,10 +187,10 @@ export const Editable = defineComponent({
     const updateRef = () => {
       // Update element-related weak maps with the DOM element ref.
       useEffect(() => {
-        if ($ref.current) {
-          EDITOR_TO_ELEMENT.set(editor, $ref.current)
-          NODE_TO_ELEMENT.set(editor, $ref.current)
-          ELEMENT_TO_NODE.set($ref.current, editor)
+        if (editableRef.current) {
+          EDITOR_TO_ELEMENT.set(editor, editableRef.current)
+          NODE_TO_ELEMENT.set(editor, editableRef.current)
+          ELEMENT_TO_NODE.set(editableRef.current, editor)
         } else {
           NODE_TO_ELEMENT.delete(editor)
         }
@@ -290,7 +287,7 @@ export const Editable = defineComponent({
     // patch beforeinput in FireFox
     if(IS_FIREFOX) {
       useEffect(() => {
-        addOnBeforeInput($ref.current, true)
+        addOnBeforeInput(editableRef.current, true)
       }, [])
     }
 
@@ -298,7 +295,7 @@ export const Editable = defineComponent({
   },
   render() {
     const editor = useEditor();
-    const {$ref} = this;
+    const {editableRef} = this;
     // name must be corresponded with standard
     const on: any  = {
       click: this._onClick,
@@ -327,7 +324,7 @@ export const Editable = defineComponent({
         // behaviors so we have to disable it like editor. (2017/04/24)
         data-gramm={false}
         role={this.readOnly ? undefined : 'textbox'}
-        v-ref = {$ref}
+        v-ref= {editableRef}
         contenteditable={this.readOnly ? false : true}
         data-slate-editor
         data-slate-node="value"

@@ -9,6 +9,7 @@ const renderSlate = (value: string, editor: any) => {
 }
 
 export const Slate = defineComponent({
+  name: 'Slate',
   props: {
     value: String
   },

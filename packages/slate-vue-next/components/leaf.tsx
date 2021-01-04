@@ -4,6 +4,19 @@ import { defineComponent, PropType, inject, h } from 'vue';
 import { Text } from 'slate';
 
 /**
+ * The default custom leaf renderer.
+ */
+
+const DefaultLeaf = (props: RenderLeafProps) => {
+  return defineComponent({
+    render() {
+      const { attributes, children } = props
+      return <span {...attributes}>{children}</span>
+    }
+  })
+}
+
+/**
  * Individual leaves in a text node with unique formatting.
  */
 
@@ -22,7 +35,7 @@ const Leaf = defineComponent({
     string,
   },
   setup() {
-    const renderLeaf = inject('renderLeaf', DefaultLeaf)
+    const renderLeaf = inject('renderLeaf', DefaultLeaf) || DefaultLeaf
     return {
       renderLeaf
     }
@@ -68,18 +81,5 @@ const Leaf = defineComponent({
     return h(renderChildren)
   }
 });
-
-/**
- * The default custom leaf renderer.
- */
-
-const DefaultLeaf = (props: RenderLeafProps) => {
-  return defineComponent({
-    render() {
-      const { attributes, children } = props
-      return <span {...attributes}>{children}</span>
-    }
-  })
-}
 
 export default Leaf
