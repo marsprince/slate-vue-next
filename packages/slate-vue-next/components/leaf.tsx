@@ -23,8 +23,7 @@ const DefaultLeaf = (props: RenderLeafProps) => {
 const Leaf = defineComponent({
   props: {
     text: {
-      type: Object as PropType<Text>,
-      required: true
+      type: Object as PropType<Text>
     },
     leaf:  {
       type: Object as PropType<Text>,
