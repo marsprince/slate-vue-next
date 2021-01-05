@@ -115,43 +115,43 @@ export const Editable = defineComponent({
           EditableComponent.onClick(event, editor, this)
         },
         onSelectionchange() {
-          EditableComponent.onSelectionchange(useEditor(), this)
+          EditableComponent.onSelectionchange(editor, this)
         },
         onBeforeInput(event: IEvent) {
-          EditableComponent.onBeforeInput(event, useEditor(), this)
+          EditableComponent.onBeforeInput(event, editor, this)
         },
         onCompositionEnd(event: any) {
-          EditableComponent.onCompositionEnd(event, useEditor(), this)
+          EditableComponent.onCompositionEnd(event, editor, this)
         },
         onCompositionStart(event: IEvent) {
-          EditableComponent.onCompositionStart(event, useEditor(), this)
+          EditableComponent.onCompositionStart(event, editor, this)
         },
         onKeyDown(event: any) {
-          EditableComponent.onKeyDown(event, useEditor(), this)
+          EditableComponent.onKeyDown(event, editor, this)
         },
         onFocus(event: any) {
-          EditableComponent.onFocus(event, useEditor(), this)
+          EditableComponent.onFocus(event, editor, this)
         },
         onBlur(event: any) {
-          EditableComponent.onBlur(event, useEditor(), this)
+          EditableComponent.onBlur(event, editor, this)
         },
         onCopy(event: any) {
-          EditableComponent.onCopy(event, useEditor(), this)
+          EditableComponent.onCopy(event, editor, this)
         },
         onPaste(event: any) {
-          EditableComponent.onPaste(event, useEditor(), this)
+          EditableComponent.onPaste(event, editor, this)
         },
         onCut(event: any) {
-          EditableComponent.onCut(event, useEditor(), this)
+          EditableComponent.onCut(event, editor, this)
         },
         onDragOver(event: any) {
-          EditableComponent.onDragOver(event, useEditor(), this)
+          EditableComponent.onDragOver(event, editor, this)
         },
         onDragStart(event: any) {
-          EditableComponent.onDragStart(event, useEditor(), this)
+          EditableComponent.onDragStart(event, editor, this)
         },
         onDrop(event: any) {
-          EditableComponent.onDrop(event, useEditor(), this)
+          EditableComponent.onDrop(event, editor, this)
         }
       };
 
@@ -182,7 +182,7 @@ export const Editable = defineComponent({
             editableRef.current.focus()
           }, 0)
         }
-      }, [props.autoFocus])
+      }, [() => props.autoFocus])
     }
     const updateRef = () => {
       // Update element-related weak maps with the DOM element ref.

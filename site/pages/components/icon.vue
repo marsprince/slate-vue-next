@@ -14,9 +14,6 @@
     props: {
       icon: String
     },
-    mounted() {
-      this.$emit('init')
-    },
     data() {
       return {
         user: {

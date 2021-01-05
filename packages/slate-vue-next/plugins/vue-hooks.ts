@@ -1,13 +1,21 @@
-import { watch, WatchOptions, reactive, ObjectDirective } from 'vue'
-import { isFunction } from '@vue/shared'
+import { watch, WatchOptions, reactive, ObjectDirective, onMounted, onUnmounted, onUpdated } from 'vue'
+import { isFunction, isArray } from '@vue/shared'
 
-export const useEffect = (effectHandler: any, dependencies: any = []) => {
-  return watch(dependencies, (changedDependencies, prevDependencies, onCleanUp) => {
-    const effectCleaner = effectHandler(changedDependencies, prevDependencies);
-    if (isFunction(effectCleaner)) {
-      onCleanUp(effectCleaner);
-    }
-  }, { immediate: true, deep: true } as WatchOptions);
+export const useEffect = (effectHandler: any, dependencies?: any) => {
+  if(dependencies === undefined) {
+    onMounted(effectHandler)
+    onUpdated(effectHandler)
+  } else if(isArray(dependencies) && dependencies.length === 0) {
+    onMounted(effectHandler)
+    onUnmounted(effectHandler)
+  } else {
+    return watch(dependencies, (changedDependencies, prevDependencies, onCleanUp) => {
+      const effectCleaner = effectHandler(changedDependencies, prevDependencies);
+      if (isFunction(effectCleaner)) {
+        onCleanUp(effectCleaner);
+      }
+    }, { immediate: true, deep: true } as WatchOptions);
+  }
 }
 
 const handleRef = (el: HTMLElement, ref: any) => {
