@@ -296,22 +296,6 @@ export const Editable = defineComponent({
   render() {
     const editor = useEditor();
     const {editableRef, eventMethods} = this;
-    // name must be corresponded with standard
-    const on: any  = {
-      click: eventMethods._onClick,
-      keydown: eventMethods._onKeyDown,
-      focus: eventMethods._onFocus,
-      blur: eventMethods._onBlur,
-      beforeinput: eventMethods._onBeforeInput,
-      copy: eventMethods._onCopy,
-      cut: eventMethods._onCut,
-      compositionend: eventMethods._onCompositionEnd,
-      compositionstart: eventMethods._onCompositionStart,
-      dragover: eventMethods._onDragOver,
-      dragstart: eventMethods._onDragStart,
-      drop: eventMethods._onDrop,
-      paste: eventMethods._onPaste
-    };
     const attrs = {
       spellcheck: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.spellCheck,
       autocorrect: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.autoCorrect,
@@ -338,8 +322,24 @@ export const Editable = defineComponent({
          // Allow for passed-in styles to override anything.
          // ...style,
         }}
-        {...{on}}
-        {...{attrs}}
+
+        onClick = {eventMethods.onClick}
+        onKeydown = {eventMethods.onKeyDown}
+        onFocus = {eventMethods.onFocus}
+        onBlur = {eventMethods.onBlur}
+        onBeforeinput = {eventMethods.onBeforeInput}
+        onCopy = {eventMethods.onCopy}
+        onCut = {eventMethods.onCut}
+        onCompositionstart = {eventMethods.onCompositionStart}
+        onCompositionend = {eventMethods.onCompositionEnd}
+        onDragover = {eventMethods.onDragOver}
+        onDragstart = {eventMethods.onDragStart}
+        onDrop = {eventMethods.onDrop}
+        onPaste = {eventMethods.onPaste}
+
+        autocorrect = {attrs.autocorrect}
+        spellcheck = {attrs.spellcheck}
+        autocapitalize = {attrs.autocapitalize}
         >
         <Children
           node={editor}
