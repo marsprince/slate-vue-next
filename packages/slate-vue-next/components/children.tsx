@@ -38,7 +38,7 @@ const Children = defineComponent({
       !editor.isInline(node) &&
       Editor.hasInlines(editor, node)
     const children = []
-    const childArr = Editor.isEditor(node) ? node._state as any : (node as Element).children
+    const childArr = Editor.isEditor(node) ? (node as any)._state : (node as Element).children
     // cacheVnode in manual to reuse
     let cacheVnode: any = null;
     for(let i=0;i<childArr.length;i++) {

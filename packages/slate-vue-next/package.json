@@ -3,13 +3,13 @@
   "version": "0.1.3",
   "dependencies": {
     "direction": "^1.0.4",
-    "slate": "^0.57.1",
+    "slate": "^0.60.2",
     "slate-vue-shared": "link:/Users/jialiu/WebstormProjects/slate-vue/packages/slate-vue-shared",
     "vue": "^3.0.4"
   },
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
   "repository": "https://github.com/marsprince/slate-vue-next.git",
-  "author": "liujia02 <bit_liujia@163.com>",
+  "author": "liujia02 <mars0prince@gmail.com>",
   "license": "MIT"
 }

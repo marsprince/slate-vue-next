@@ -1,6 +1,7 @@
 import { createEditor, Operation } from 'slate';
 import { vRef } from './vue-hooks';
 import { useEditor } from './slate-hooks';
+import { withVue } from './with-vue'
 
 // for element and element[]
 export const elementWatcherPlugin = (instance: any, type: string) => {
@@ -23,7 +24,7 @@ export const elementWatcherPlugin = (instance: any, type: string) => {
 }
 
 export const createEditorInstance = () => {
-  const editor = createEditor()
+  const editor = withVue(createEditor() as any)
   return editor
 }
 

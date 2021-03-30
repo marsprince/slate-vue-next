@@ -110,70 +110,63 @@ export const Editable = defineComponent({
 
     const editor = useEditor()
 
-    const eventMethods = {
+    const getEventMethods = (ctx: any) => {
+      return {
         onClick(event: IEvent) {
-          EditableComponent.onClick(event, editor, this)
+          EditableComponent.onClick(event, editor, ctx)
         },
         onSelectionchange() {
-          EditableComponent.onSelectionchange(editor, this)
+          EditableComponent.onSelectionchange(editor, ctx)
         },
         onBeforeInput(event: IEvent) {
-          EditableComponent.onBeforeInput(event, editor, this)
+          EditableComponent.onBeforeInput(event, editor, ctx)
         },
         onCompositionEnd(event: any) {
-          EditableComponent.onCompositionEnd(event, editor, this)
+          EditableComponent.onCompositionEnd(event, editor, ctx)
         },
         onCompositionStart(event: IEvent) {
-          EditableComponent.onCompositionStart(event, editor, this)
+          EditableComponent.onCompositionStart(event, editor, ctx)
         },
         onKeyDown(event: any) {
-          EditableComponent.onKeyDown(event, editor, this)
+          EditableComponent.onKeyDown(event, editor, ctx)
         },
         onFocus(event: any) {
-          EditableComponent.onFocus(event, editor, this)
+          EditableComponent.onFocus(event, editor, ctx)
         },
         onBlur(event: any) {
-          EditableComponent.onBlur(event, editor, this)
+          EditableComponent.onBlur(event, editor, ctx)
         },
         onCopy(event: any) {
-          EditableComponent.onCopy(event, editor, this)
+          EditableComponent.onCopy(event, editor, ctx)
         },
         onPaste(event: any) {
-          EditableComponent.onPaste(event, editor, this)
+          EditableComponent.onPaste(event, editor, ctx)
         },
         onCut(event: any) {
-          EditableComponent.onCut(event, editor, this)
+          EditableComponent.onCut(event, editor, ctx)
         },
         onDragOver(event: any) {
-          EditableComponent.onDragOver(event, editor, this)
+          EditableComponent.onDragOver(event, editor, ctx)
         },
         onDragStart(event: any) {
-          EditableComponent.onDragStart(event, editor, this)
+          EditableComponent.onDragStart(event, editor, ctx)
         },
         onDrop(event: any) {
-          EditableComponent.onDrop(event, editor, this)
+          EditableComponent.onDrop(event, editor, ctx)
         }
       };
+    }
 
     const dataAndMethods: any = {
       editableRef,
       isComposing,
       isUpdatingSelection,
       latestElement,
-      eventMethods
+      getEventMethods
     }
 
     IS_READ_ONLY.set(editor, props.readOnly)
 
-    const initListener = ()=>{
-      // Attach a native DOM event handler for `selectionchange`
-      useEffect(()=>{
-        document.addEventListener('selectionchange', eventMethods.onSelectionchange)
-        return () => {
-          document.removeEventListener('selectionchange', eventMethods.onSelectionchange)
-        }
-      });
-    };
     const updateAutoFocus = () => {
       useEffect(() => {
         if (editableRef.current && props.autoFocus) {
@@ -274,9 +267,6 @@ export const Editable = defineComponent({
         })
       })
     }
-
-    // init selectionchange
-    initListener();
     // Update element-related weak maps with the DOM element ref.
     updateRef();
     // Whenever the editor updates, make sure the DOM selection state is in sync.
@@ -295,7 +285,22 @@ export const Editable = defineComponent({
   },
   render() {
     const editor = useEditor();
-    const {editableRef, eventMethods} = this;
+    const {editableRef, getEventMethods} = this;
+    const eventMethods = getEventMethods(this)
+
+    const initListener = () => {
+      // Attach a native DOM event handler for `selectionchange`
+      useEffect(()=>{
+        document.addEventListener('selectionchange', eventMethods.onSelectionchange)
+        return () => {
+          document.removeEventListener('selectionchange', eventMethods.onSelectionchange)
+        }
+      });
+    };
+
+    // init selectionchange
+    initListener();
+
     const attrs = {
       spellcheck: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.spellCheck,
       autocorrect: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.autoCorrect,

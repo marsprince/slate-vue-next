@@ -44,7 +44,7 @@ const Leaf = defineComponent({
     let children =  (
       <string leaf={leaf}/>
       );
-    if (leaf[PLACEHOLDER_SYMBOL]) {
+    if ((leaf as any)[PLACEHOLDER_SYMBOL]) {
       children = (
         <fragment>
           <span
@@ -59,7 +59,7 @@ const Leaf = defineComponent({
               opacity: '0.333',
             }}
           >
-            {leaf.placeholder}
+            {(leaf as any).placeholder}
           </span>
           {children}
         </fragment>
