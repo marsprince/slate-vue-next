@@ -2,12 +2,6 @@ import { reactive, defineComponent } from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
 import { useEditor } from '../plugins';
 
-const renderSlate = (value: string, editor: any) => {
-  editor.children = JSON.parse(value);
-  const $$data = JSON.parse(value);
-  editor._state = reactive($$data)
-}
-
 export const Slate = defineComponent({
   name: 'Slate',
   props: {
@@ -15,10 +9,25 @@ export const Slate = defineComponent({
   },
   setup({ value }: any, ctx: any) {
     const editor = useEditor()
-    renderSlate(value, editor)
-    // EDITOR_TO_ON_CHANGE.set(editor, () => {
-    //
-    // })
+
+    const clearEditor = () => {
+      editor.selection = null
+    }
+
+    const renderSlate = (newVal?: any) => {
+      const _value = newVal || value
+      editor.children = JSON.parse(_value);
+      const $$data = JSON.parse(_value);
+      editor._state = reactive($$data)
+
+      clearEditor()
+    }
+    renderSlate(value)
+    EDITOR_TO_ON_CHANGE.set(editor, () => {
+      // TODO: update selected and focused
+      // TODO: how to notify others component like toolbar
+      ctx.emit('onChange')
+    })
   },
   render(this: any) {
     return this.$slots.default()

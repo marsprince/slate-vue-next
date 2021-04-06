@@ -35,10 +35,11 @@ const Text = defineComponent({
   components: {
     leaf
   },
-  inject: ['decorate', 'placeholder'],
   setup(props) {
     const textRef = useRef(null);
     const { text, isLast, parent } = props;
+
+    // provide and inject
     provide('text', text)
     provide('isLast', isLast)
     provide('parent', parent)

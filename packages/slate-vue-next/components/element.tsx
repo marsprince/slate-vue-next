@@ -28,7 +28,6 @@ const Element: any = defineComponent({
       required: true
     }
   },
-  inject: ['readOnly', 'renderElement'],
   components:{
     Children
   },
