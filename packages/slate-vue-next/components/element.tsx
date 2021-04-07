@@ -69,7 +69,7 @@ const Element: any = defineComponent({
         node={element}
       />
     )
-    const attributes: any = {
+    const attributes: RenderElementAttributes = {
       'data-slate-node': 'element'
     };
     if (isInline) {
