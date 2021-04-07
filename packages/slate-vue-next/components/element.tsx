@@ -15,7 +15,7 @@ import {
   VueEditor,
   RenderElementAttributes, RenderElementProps
 } from 'slate-vue-shared';
-import { PropType, defineComponent, h, inject, FunctionalComponent } from 'vue';
+import { PropType, defineComponent, h, inject, FunctionalComponent, withDirectives, resolveDirective, Directive } from 'vue';
 
 /**
  * Element
@@ -69,7 +69,7 @@ const Element: any = defineComponent({
         node={element}
       />
     )
-    const attributes: RenderElementAttributes = {
+    const attributes: any = {
       'data-slate-node': 'element'
     };
     if (isInline) {
@@ -116,11 +116,15 @@ const Element: any = defineComponent({
       NODE_TO_PARENT.set(text, element)
     }
 
-    return h(renderElement({
+    const refDir = resolveDirective('ref')
+
+    return withDirectives(h(renderElement({
       element,
       attributes,
       children
-    }, this as any))
+    }, this as any)), [
+      [refDir as Directive, ref]
+    ])
   }
 })
 
