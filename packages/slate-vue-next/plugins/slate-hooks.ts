@@ -1,5 +1,7 @@
-import {getCurrentInstance, watchEffect} from 'vue'
+import {getCurrentInstance} from 'vue'
 import { createEditorInstance } from './slate-plugin';
+
+const onEditorChangeCallbacks: Array<undefined | Function> = []
 
 export const useInstance = (): any => {
   return getCurrentInstance()
@@ -33,8 +35,11 @@ export const useSlate = () => {
   const instance = useInstance()
   // update will be triggered both reactivity and manual
   //
-  const editor = useEditor()
-  watchEffect(() => {
-    editor._state.forEach(()=>{})
+  onEditorChangeCallbacks.push(() => {
+    instance.update()
   })
+}
+
+export const triggerUpdate = () => {
+  onEditorChangeCallbacks.forEach(fn => fn && fn())
 }

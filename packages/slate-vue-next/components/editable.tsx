@@ -1,5 +1,5 @@
 import Children from './children';
-import { useEditor, useEffect, useRef } from '../plugins';
+import { useEditor, useEffect, useRef, useSlate } from '../plugins';
 import {
   EDITOR_TO_ELEMENT, NODE_TO_ELEMENT, ELEMENT_TO_NODE, IS_READ_ONLY,
   IS_FIREFOX, IS_SAFARI, IS_EDGE_LEGACY,
@@ -9,7 +9,7 @@ import {
   VueEditor
 } from 'slate-vue-shared';
 import { Range } from 'slate';
-import { PropType, defineComponent, ref, provide } from 'vue';
+import { PropType, defineComponent, ref, provide, reactive, onUpdated } from 'vue';
 
 interface IEvent extends Event {
   data: string | null
@@ -101,6 +101,17 @@ export const Editable = defineComponent({
     const isComposing = ref(false)
     const isUpdatingSelection = ref(false)
     const latestElement = ref(null)
+    /**
+     * update with slate
+     */
+    useSlate()
+
+    const mockCtx = reactive({
+      readOnly: props.readOnly,
+      isComposing,
+      isUpdatingSelection,
+      latestElement
+    })
 
     provide('renderLeaf', props.renderLeaf)
     provide('renderElement', props.renderElement)
@@ -166,6 +177,16 @@ export const Editable = defineComponent({
     }
 
     IS_READ_ONLY.set(editor, props.readOnly)
+
+    const initListener = () => {
+      // Attach a native DOM event handler for `selectionchange`
+      useEffect(()=>{
+        document.addEventListener('selectionchange', () => EditableComponent.onSelectionchange(editor, mockCtx))
+        return () => {
+          document.removeEventListener('selectionchange', () => EditableComponent.onSelectionchange(editor, mockCtx))
+        }
+      });
+    };
 
     const updateAutoFocus = () => {
       useEffect(() => {
@@ -267,6 +288,8 @@ export const Editable = defineComponent({
         })
       })
     }
+    // init selectionchange
+    initListener();
     // Update element-related weak maps with the DOM element ref.
     updateRef();
     // Whenever the editor updates, make sure the DOM selection state is in sync.
@@ -287,19 +310,6 @@ export const Editable = defineComponent({
     const editor = useEditor();
     const {editableRef, getEventMethods} = this;
     const eventMethods = getEventMethods(this)
-
-    const initListener = () => {
-      // Attach a native DOM event handler for `selectionchange`
-      useEffect(()=>{
-        document.addEventListener('selectionchange', eventMethods.onSelectionchange)
-        return () => {
-          document.removeEventListener('selectionchange', eventMethods.onSelectionchange)
-        }
-      });
-    };
-
-    // init selectionchange
-    initListener();
 
     const attrs = {
       spellcheck: !HAS_BEFORE_INPUT_SUPPORT ? undefined : this.spellCheck,

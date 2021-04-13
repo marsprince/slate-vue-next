@@ -1,12 +1,13 @@
-import { reactive, defineComponent } from 'vue'
+import { reactive, defineComponent, nextTick } from 'vue'
 import {EDITOR_TO_ON_CHANGE} from 'slate-vue-shared';
-import { useEditor } from '../plugins';
+import { useEditor, triggerUpdate } from '../plugins';
 
 export const Slate = defineComponent({
   name: 'Slate',
   props: {
     value: String
   },
+  emits: ['onChange'],
   setup({ value }: any, ctx: any) {
     const editor = useEditor()
 
@@ -23,9 +24,12 @@ export const Slate = defineComponent({
       clearEditor()
     }
     renderSlate(value)
-    EDITOR_TO_ON_CHANGE.set(editor, () => {
+
+    EDITOR_TO_ON_CHANGE.set(editor, async () => {
+      await nextTick()
+      triggerUpdate()
+
       // TODO: update selected and focused
-      // TODO: how to notify others component like toolbar
       ctx.emit('onChange')
     })
   },
