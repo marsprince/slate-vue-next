@@ -46,23 +46,23 @@ const Leaf = defineComponent({
       );
     if ((leaf as any)[PLACEHOLDER_SYMBOL]) {
       children = (
-        <fragment>
-          <span
-            contenteditable={false}
-            style={{
-              pointerEvents: 'none',
-              display: 'inline-block',
-              verticalAlign: 'text-top',
-              width: '0',
-              maxWidth: '100%',
-              whiteSpace: 'nowrap',
-              opacity: '0.333',
-            }}
-          >
+         <>
+            <span
+              contenteditable={false}
+              style={{
+                pointerEvents: 'none',
+                display: 'inline-block',
+                verticalAlign: 'text-top',
+                width: '0',
+                maxWidth: '100%',
+                whiteSpace: 'nowrap',
+                opacity: '0.333',
+              }}
+            >
             {(leaf as any).placeholder}
-          </span>
-          {children}
-        </fragment>
+            </span>
+            {children}
+        </>
       )
     }
 

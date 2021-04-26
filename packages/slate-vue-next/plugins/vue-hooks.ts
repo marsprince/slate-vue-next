@@ -18,7 +18,7 @@ export const useEffect = (effectHandler: any, dependencies?: any) => {
   }
 }
 
-const handleRef = (el: HTMLElement, ref: any) => {
+const handleRef = (el: HTMLElement | null, ref: any) => {
   if(typeof ref === 'function') {
     ref(el)
   } else {
@@ -37,7 +37,7 @@ export const vRef: ObjectDirective<HTMLElement> = {
     handleRef(el, binding.value)
   },
   unmounted(el, binding) {
-    handleRef(el, null)
+    handleRef(null, binding.value)
   }
 }
 
